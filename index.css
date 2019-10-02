@@ -1,0 +1,115 @@
+body {
+    background: #f9f8ee;
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.header {
+    color: #776e65;
+}
+
+.game-name {
+    font-size: 80px;
+    font-weight: bold;
+}
+
+.buttons > button {
+    background: #8f7a66;
+    color: #f9f6f2;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.buttons > button:hover {
+    background: #776e65;
+}
+
+.container {
+    display: table;
+    background: #a49281;
+    border: 0.5em solid #a49281;
+    border-radius: 14px;
+    margin: 0 auto;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    background: #bdb09f;
+    color: #776e65;
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    font-weight: bold;
+    font-size: 60px;
+    text-align: center;
+    vertical-align: middle;
+    border: 10px solid #a49281;
+    border-radius: 14px;
+    width: 120px;
+    height: 120px;
+}
+
+.cell-2 {
+    background: #eee4da;
+}
+
+.cell-4 {
+    background: #ede0c8;
+}
+
+.cell-8 {
+    background: #f2b179;
+    color: #f9f6f2;
+}
+
+.cell-16 {
+    background: #f59563;
+    color: #f9f6f2;
+}
+
+.cell-32 {
+    background: #f67c5f;
+    color: #f9f6f2;
+}
+
+.cell-64 {
+    background: #f65e3b;
+    color: #f9f6f2;
+}
+
+.cell-128 {
+    background: #edcf72;
+    color: #f9f6f2;
+}
+
+.cell-256 {
+    background: #edcc61;
+    color: #f9f6f2;
+}
+
+.cell-512 {
+    background: #edc850;
+    color: #f9f6f2;
+}
+
+.cell-1024 {
+    background: #edc53f;
+    color: #f9f6f2;
+}
+
+.cell-2048 {
+    background: #edc22e;
+    color: #f9f6f2;
+}
+
+.cell-more {
+    background: #3c3a32;
+    color: #f9f6f2;
+}

@@ -10,6 +10,15 @@ module.exports = {
             test: /\.ts$/,
             use: 'ts-loader',
             exclude: /node_modules/,
+        }, {
+            test: /\.less$/,
+            use: [{
+                loader: 'style-loader',
+            }, {
+                loader: 'css-loader',
+            }, {
+                loader: 'less-loader',
+            }],
         }],
     },
     resolve: {
@@ -30,10 +39,6 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.html')
-        }),
-        new CopyPlugin([{
-            from: path.join(__dirname, 'index.css'),
-            to: path.join(__dirname, 'dist')
-        }])
+        })
     ]
 };

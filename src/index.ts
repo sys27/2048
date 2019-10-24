@@ -1,12 +1,12 @@
-import { Trainer } from "./ai/Trainer";
 import { Game } from "./Game";
 import { Renderer } from "./Renderer";
 import { Storage } from "./Storage";
 
-let game = new Game();
-let storage = new Storage();
-let renderer = new Renderer(game, storage);
-let trainer = new Trainer();
+import "../index.less";
+
+const game = new Game();
+const storage = new Storage();
+const renderer = new Renderer(game, storage);
 
 if (storage.hasSaves())
     storage.restore(game);

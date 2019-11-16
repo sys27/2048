@@ -59,9 +59,6 @@ export class Game {
             if (!this._grid.hasMoves()) {
                 this._finished = true;
             }
-
-            // TODO: remove!
-            this.raiseGameUpdated();
         }
     }
 

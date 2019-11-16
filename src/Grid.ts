@@ -2,9 +2,11 @@ import { Cell } from "./Cell";
 import { MoveDirection } from "./MoveDirection";
 import { IPosition } from "./Position";
 
-type CellMoved = (from: IPosition, to: IPosition) => void;
+export type CellMoved = (from: IPosition, to: IPosition) => void;
 
-type CellMerged = (newCell: Cell) => void;
+export type CellMerged = (newCell: Cell, from: IPosition, to: IPosition) => void;
+
+export type CellCreated = (newCell: Cell, position: IPosition) => void;
 
 export class Grid {
 
@@ -15,6 +17,7 @@ export class Grid {
 
     private _cellMoved?: CellMoved;
     private _cellMerged?: CellMerged;
+    private _cellCreated?: CellCreated;
 
     public constructor() {
         this.initializeEmpty();
@@ -49,11 +52,19 @@ export class Grid {
         this._cellMerged = cellMerged;
     }
 
+    public addSubscriptionToCellCreated(cellCreated: CellCreated): void {
+        if (!cellCreated)
+            throw new Error();
+
+        this._cellCreated = cellCreated;
+    }
+
     public addNewCell(): void {
         const position = this.generatePosition();
         const cell = this.generateNewCell();
 
         this._cells[position.row][position.column] = cell;
+        this.raiseCellCreated(cell, position);
     }
 
     public hasMoves(): boolean {
@@ -110,7 +121,7 @@ export class Grid {
                     const nextCell = this._cells[k][column];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row, column }, { row: k, column });
+                        this.raiseCellMoved({ row: k, column }, { row, column });
                         updated = true;
                         break;
                     }
@@ -132,7 +143,7 @@ export class Grid {
                     this._cells[row + 1][column] = Cell.empty();
 
                     updated = true;
-                    this.raiseCellMerged(newCell);
+                    this.raiseCellMerged(newCell, { row: row + 1, column }, { row, column });
                 }
             }
         }
@@ -148,7 +159,7 @@ export class Grid {
                     const nextCell = this._cells[k][column];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row, column }, { row: k, column });
+                        this.raiseCellMoved({ row: k, column }, { row, column });
                         updated = true;
                         break;
                     }
@@ -173,7 +184,7 @@ export class Grid {
                     const nextCell = this._cells[k][column];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row, column }, { row: k, column });
+                        this.raiseCellMoved({ row: k, column }, { row, column });
                         updated = true;
                         break;
                     }
@@ -195,7 +206,7 @@ export class Grid {
                     this._cells[row - 1][column] = Cell.empty();
 
                     updated = true;
-                    this.raiseCellMerged(newCell);
+                    this.raiseCellMerged(newCell, { row: row - 1, column }, { row, column });
                 }
             }
         }
@@ -211,7 +222,7 @@ export class Grid {
                     const nextCell = this._cells[k][column];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ column, row }, { column, row: k });
-                        this.raiseCellMoved({ row, column }, { row: k, column });
+                        this.raiseCellMoved({ row: k, column }, { row, column });
                         updated = true;
                         break;
                     }
@@ -236,7 +247,7 @@ export class Grid {
                     const nextCell = this._cells[row][k];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column }, { row, column: k });
+                        this.raiseCellMoved({ row, column: k }, { row, column });
                         updated = true;
                         break;
                     }
@@ -258,7 +269,7 @@ export class Grid {
                     this._cells[row][column + 1] = Cell.empty();
 
                     updated = true;
-                    this.raiseCellMerged(newCell);
+                    this.raiseCellMerged(newCell, { row, column: column + 1 }, { row, column });
                 }
             }
         }
@@ -274,7 +285,7 @@ export class Grid {
                     const nextCell = this._cells[row][k];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column }, { row, column: k });
+                        this.raiseCellMoved({ row, column: k }, { row, column });
                         updated = true;
                         break;
                     }
@@ -299,7 +310,7 @@ export class Grid {
                     const nextCell = this._cells[row][k];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column }, { row, column: k });
+                        this.raiseCellMoved({ row, column: k }, { row, column });
                         updated = true;
                         break;
                     }
@@ -321,7 +332,7 @@ export class Grid {
                     this._cells[row][column - 1] = Cell.empty();
 
                     updated = true;
-                    this.raiseCellMerged(newCell);
+                    this.raiseCellMerged(newCell, { row, column: column - 1 }, { row, column });
                 }
             }
         }
@@ -337,7 +348,7 @@ export class Grid {
                     const nextCell = this._cells[row][k];
                     if (nextCell && !nextCell.isEmpty) {
                         this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column }, { row, column: k });
+                        this.raiseCellMoved({ row, column: k }, { row, column });
                         updated = true;
                         break;
                     }
@@ -410,9 +421,14 @@ export class Grid {
             this._cellMoved(from, to);
     }
 
-    private raiseCellMerged(newCell: Cell): void {
+    private raiseCellMerged(newCell: Cell, from: IPosition, to: IPosition): void {
         if (this._cellMerged)
-            this._cellMerged(newCell);
+            this._cellMerged(newCell, from, to);
+    }
+
+    private raiseCellCreated(newCell: Cell, position: IPosition): void {
+        if (this._cellCreated)
+            this._cellCreated(newCell, position);
     }
 
     public get cells(): Cell[][] {

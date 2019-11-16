@@ -34,9 +34,10 @@ body {
 .container {
     display: table;
     background: #a49281;
-    border: 0.5em solid #a49281;
+    border: 8px solid #a49281;
     border-radius: 14px;
     margin: 0 auto;
+    position: relative;
 }
 
 .row {
@@ -49,13 +50,27 @@ body {
     color: #776e65;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
     font-weight: bold;
-    font-size: 60px;
+    font-size: 40px;
     text-align: center;
     vertical-align: middle;
-    border: 10px solid #a49281;
+    border: 8px solid #a49281;
     border-radius: 14px;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
+
+    &-floating {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        transition: top 0.3s, left 0.3s;
+    }
+
+    &-content {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
     &-2 {
         background: #eee4da;

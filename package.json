@@ -25,8 +25,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "test": "tsc && node spec/runner.js",
-    "train": "tsc && node src/node.js"
+    "test": "tsc && node spec/runner.js"
   },
   "keywords": [],
   "author": "",

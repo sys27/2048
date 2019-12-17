@@ -15,7 +15,7 @@ export class Cell {
 
     public mergeWith(cell: Cell): Cell {
         if (!this.canMergeWith(cell))
-            throw new Error();
+            throw new Error(`${this._value} and ${cell._value} cannot be merged.`);
 
         return new Cell(this.value + cell.value);
     }

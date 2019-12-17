@@ -27,11 +27,11 @@ export class Grid {
 
     public initializeFrom(cells: Cell[][]): void {
         if (cells.length !== Grid.rows)
-            throw new Error();
+            throw new Error(`The row length should be equal to ${Grid.rows}.`);
 
         for (const row of cells)
             if (row.length !== Grid.columns)
-                throw new Error();
+                throw new Error(`The column length should be equal to ${Grid.columns}.`);
 
         this._cells = cells;
     }
@@ -42,21 +42,21 @@ export class Grid {
 
     public addSubsriptionToCellMoved(cellMoved: EventHandler<CellMovedEventArgs>): void {
         if (!cellMoved)
-            throw new Error();
+            throw new Error(`The handler is undefined.`);
 
         this._cellMoved.on(cellMoved);
     }
 
     public addSubsriptionToCellMerged(cellMerged: EventHandler<CellMergedEventArgs>): void {
         if (!cellMerged)
-            throw new Error();
+            throw new Error(`The handler is undefined.`);
 
         this._cellMerged.on(cellMerged);
     }
 
     public addSubscriptionToCellCreated(cellCreated: EventHandler<CellCreatedEventArgs>): void {
         if (!cellCreated)
-            throw new Error();
+            throw new Error(`The handler is undefined.`);
 
         this._cellCreated.on(cellCreated);
     }
@@ -410,10 +410,10 @@ export class Grid {
 
     private getCell(row: number, column: number): Cell {
         if (row < 0 || row >= Grid.rows)
-            throw new Error();
+            throw new Error(`The row index is invalid.`);
 
         if (column < 0 || column >= Grid.columns)
-            throw new Error();
+            throw new Error(`The column index is invalid.`);
 
         return this._cells[row][column];
     }

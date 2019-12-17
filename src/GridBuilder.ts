@@ -23,13 +23,13 @@ export class GridBuilder {
 
     private setCell(cell: Cell, position: IPosition): GridBuilder {
         if (!cell)
-            throw new Error();
+            throw new Error(`The cell is undefined.`);
 
         if (position.row < 0 || position.row >= Grid.rows)
-            throw new Error();
+            throw new Error(`The row index is invalid.`);
 
         if (position.column < 0 || position.column >= Grid.columns)
-            throw new Error();
+            throw new Error(`The column index is invalid.`);
 
         this._cells[position.row][position.column] = cell;
 

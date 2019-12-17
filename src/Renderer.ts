@@ -20,7 +20,7 @@ export class Renderer {
         private storage: Storage,
     ) {
         if (!game)
-            throw new Error();
+            throw new Error(`The game is undefined.`);
 
         this._scoreElement = document.getElementById("score_value");
         this._container = document.getElementsByClassName("container")[0];

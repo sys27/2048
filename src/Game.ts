@@ -21,14 +21,12 @@ export class Game {
         this._score = 0;
         this._finished = false;
         this._grid = new Grid();
-        this._grid.addSubsriptionToCellMerged(args => {
-            this._score += args.newCell.value;
-        });
+        this._grid.addSubsriptionToCellMerged(args => this._score += args.newCell.value);
     }
 
     public addSubsriptionToGameUpdated(gameUpdated: EventHandler<EventArgs>): void {
         if (!gameUpdated)
-            throw new Error();
+            throw new Error(`The handler is undefined.`);
 
         this._gameUpdated.on(gameUpdated);
     }

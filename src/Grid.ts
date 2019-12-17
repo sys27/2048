@@ -1,12 +1,10 @@
 import { Cell } from "./Cell";
+import { CellCreatedEventArgs } from "./Events/CellCreatedEventArgs";
+import { CellMergedEventArgs } from "./Events/CellMergedEventArgs";
+import { CellMovedEventArgs } from "./Events/CellMovedEventArgs";
+import { Event, EventHandler } from "./Events/Event";
 import { MoveDirection } from "./MoveDirection";
 import { IPosition } from "./Position";
-
-export type CellMoved = (from: IPosition, to: IPosition) => void;
-
-export type CellMerged = (newCell: Cell, from: IPosition, to: IPosition) => void;
-
-export type CellCreated = (newCell: Cell, position: IPosition) => void;
 
 export class Grid {
 
@@ -15,11 +13,15 @@ export class Grid {
 
     private _cells: Cell[][];
 
-    private _cellMoved?: CellMoved;
-    private _cellMerged?: CellMerged;
-    private _cellCreated?: CellCreated;
+    private _cellMoved: Event<CellMovedEventArgs>;
+    private _cellMerged: Event<CellMergedEventArgs>;
+    private _cellCreated: Event<CellCreatedEventArgs>;
 
     public constructor() {
+        this._cellMoved = new Event<CellMovedEventArgs>();
+        this._cellMerged = new Event<CellMergedEventArgs>();
+        this._cellCreated = new Event<CellCreatedEventArgs>();
+
         this.initializeEmpty();
     }
 
@@ -38,25 +40,25 @@ export class Grid {
         this._cells = this.generateEmptyField();
     }
 
-    public addSubsriptionToCellMoved(cellMoved: CellMoved): void {
+    public addSubsriptionToCellMoved(cellMoved: EventHandler<CellMovedEventArgs>): void {
         if (!cellMoved)
             throw new Error();
 
-        this._cellMoved = cellMoved;
+        this._cellMoved.on(cellMoved);
     }
 
-    public addSubsriptionToCellMerged(cellMerged: CellMerged): void {
+    public addSubsriptionToCellMerged(cellMerged: EventHandler<CellMergedEventArgs>): void {
         if (!cellMerged)
             throw new Error();
 
-        this._cellMerged = cellMerged;
+        this._cellMerged.on(cellMerged);
     }
 
-    public addSubscriptionToCellCreated(cellCreated: CellCreated): void {
+    public addSubscriptionToCellCreated(cellCreated: EventHandler<CellCreatedEventArgs>): void {
         if (!cellCreated)
             throw new Error();
 
-        this._cellCreated = cellCreated;
+        this._cellCreated.on(cellCreated);
     }
 
     public addNewCell(): void {
@@ -418,17 +420,17 @@ export class Grid {
 
     private raiseCellMoved(from: IPosition, to: IPosition): void {
         if (this._cellMoved)
-            this._cellMoved(from, to);
+            this._cellMoved.raise(new CellMovedEventArgs(from, to));
     }
 
     private raiseCellMerged(newCell: Cell, from: IPosition, to: IPosition): void {
         if (this._cellMerged)
-            this._cellMerged(newCell, from, to);
+            this._cellMerged.raise(new CellMergedEventArgs(newCell, from, to));
     }
 
     private raiseCellCreated(newCell: Cell, position: IPosition): void {
         if (this._cellCreated)
-            this._cellCreated(newCell, position);
+            this._cellCreated.raise(new CellCreatedEventArgs(newCell, position));
     }
 
     public get cells(): Cell[][] {

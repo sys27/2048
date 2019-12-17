@@ -1,9 +1,9 @@
 import { Cell } from "./Cell";
+import { Event, EventHandler } from "./Events/Event";
+import { EventArgs } from "./Events/EventArgs";
 import { Grid } from "./Grid";
 import { MoveDirection } from "./MoveDirection";
 import { IStorageData } from "./Storage";
-
-export type GameUpdated = (game: Game) => void;
 
 export class Game {
 
@@ -13,20 +13,24 @@ export class Game {
 
     private _finished: boolean;
 
-    private _gameUpdated?: GameUpdated;
+    private _gameUpdated: Event<EventArgs>;
 
     public constructor() {
+        this._gameUpdated = new Event<EventArgs>();
+
         this._score = 0;
         this._finished = false;
         this._grid = new Grid();
-        this._grid.addSubsriptionToCellMerged(newCell => this._score += newCell.value);
+        this._grid.addSubsriptionToCellMerged(args => {
+            this._score += args.newCell.value;
+        });
     }
 
-    public addSubsriptionToGameUpdated(gameUpdated: GameUpdated): void {
+    public addSubsriptionToGameUpdated(gameUpdated: EventHandler<EventArgs>): void {
         if (!gameUpdated)
             throw new Error();
 
-        this._gameUpdated = gameUpdated;
+        this._gameUpdated.on(gameUpdated);
     }
 
     public newGame(): void {
@@ -64,7 +68,7 @@ export class Game {
 
     private raiseGameUpdated(): void {
         if (this._gameUpdated)
-            this._gameUpdated(this);
+            this._gameUpdated.raise(new EventArgs());
     }
 
     public get cells(): Cell[][] {

@@ -21,3 +21,10 @@ jobs:
         npm i
         npm run build
         npm test
+    - name: Deploy
+      uses: crazy-max/ghaction-github-pages@v1
+      with:
+        target_branch: gh-pages
+        build_dir: dist
+      env:
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

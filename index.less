@@ -1,17 +1,35 @@
 body {
     background: #f9f8ee;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-    width: 600px;
+    width: 500px;
     margin: 0 auto;
 }
 
 .header {
     color: #776e65;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 2px;
+
+    >* {
+        padding: 2px;
+    }
+
+    >.score {
+        border: solid 1px #8f7a66;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: 18px;
+        padding: 10px 20px;
+        text-align: center;
+    }
 }
 
 .game-name {
     font-size: 80px;
     font-weight: bold;
+    flex-grow: 1;
 }
 
 .buttons {
@@ -20,7 +38,7 @@ body {
         color: #f9f6f2;
         font-size: 18px;
         font-weight: bold;
-        border: none;
+        border: 1px solid #8f7a66;
         border-radius: 3px;
         padding: 10px 20px;
         text-align: center;
@@ -63,6 +81,8 @@ body {
         top: -9999px;
         left: -9999px;
         transition: top 0.3s, left 0.3s;
+        animation-name: popup;
+        animation-duration: 0.3s;
     }
 
     &-content {
@@ -128,5 +148,15 @@ body {
     &-more {
         background: #3c3a32;
         color: #f9f6f2;
+    }
+}
+
+@keyframes popup {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
     }
 }

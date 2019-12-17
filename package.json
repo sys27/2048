@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/jasmine": "^3.4.4",
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.5.0",
@@ -19,11 +20,13 @@
     "typescript-tslint-plugin": "^0.5.4",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1"
+    "webpack-dev-server": "^3.8.1",
+    "webpack-merge": "^4.2.2"
   },
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server",
+    "build": "webpack --config webpack.prod.js",
+    "build-dev": "webpack --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "test": "tsc && node spec/runner.js"
   },
   "keywords": [],

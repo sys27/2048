@@ -1,8 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: path.join(__dirname, 'src/index.ts'),
     module: {
         rules: [{
@@ -29,13 +29,8 @@ module.exports = {
         libraryTarget: 'var',
         library: 'Index',
     },
-    devtool: 'source-map',
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        https: false
-    },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.html')
         })

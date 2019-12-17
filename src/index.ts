@@ -4,6 +4,10 @@ import { Storage } from "./Storage";
 
 import "../index.less";
 
+if (module.hot) {
+    module.hot.accept();
+}
+
 const game = new Game();
 const storage = new Storage();
 const renderer = new Renderer(game, storage);

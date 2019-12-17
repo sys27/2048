@@ -39,7 +39,15 @@ export class Renderer {
                 game.move(MoveDirection.Left);
             else if (event.key === "ArrowRight")
                 game.move(MoveDirection.Right);
-        }, false);
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowUp" ||
+                event.key === "ArrowDown" ||
+                event.key === "ArrowLeft" ||
+                event.key === "ArrowRight")
+                event.preventDefault();
+        });
     }
 
     private renderGame(args: EventArgs): void {

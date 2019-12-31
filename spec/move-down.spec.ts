@@ -1,7 +1,7 @@
 import { GridBuilder } from "../src/GridBuilder";
 import { MoveDirection } from "../src/MoveDirection";
 
-describe("Move Right", () => {
+describe("Move Down", () => {
 
     it("should merge 0 - 0 - 2 - 2", () => {
         const grid = GridBuilder

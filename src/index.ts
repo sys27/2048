@@ -5,7 +5,7 @@ import { Storage } from "./Storage";
 import "../index.less";
 
 if (module.hot) {
-    module.hot.accept();
+    module.hot.accept(error => { throw error; });
 }
 
 const game = new Game();

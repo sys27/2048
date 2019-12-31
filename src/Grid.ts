@@ -6,6 +6,9 @@ import { Event, EventHandler } from "./Events/Event";
 import { MoveDirection } from "./MoveDirection";
 import { IPosition } from "./Position";
 
+type VerticalDirection = -1 | 1;
+type HorizontalDirection = -1 | 1;
+
 export class Grid {
 
     public static readonly rows: number = 4;
@@ -109,63 +112,75 @@ export class Grid {
         return updated;
     }
 
+    private mergeVertical(from: IPosition, direction: VerticalDirection): boolean {
+        let updated = false;
+        let fromCell = this.getCell(from.row, from.column); // TODO: one param?
+
+        for (let row = from.row + direction; row >= 0 && row < Grid.rows; row += direction) {
+            const toCell = this.getCell(row, from.column);
+            if (toCell.isEmpty)
+                continue;
+
+            if (fromCell.isEmpty) {
+                this.swapCells({ row, column: from.column }, from);
+                this.raiseCellMoved({ row, column: from.column }, from);
+                fromCell = toCell;
+
+                updated = true;
+            } else if (fromCell.canMergeWith(toCell)) {
+                const newCell = fromCell.mergeWith(toCell);
+                this._cells[from.row][from.column] = newCell;
+                this._cells[row][from.column] = Cell.empty();
+                this.raiseCellMerged(newCell, { row, column: from.column }, from);
+
+                updated = true;
+                return updated;
+            } else {
+                return updated;
+            }
+        }
+
+        return updated;
+    }
+
+    private mergeHorizontal(from: IPosition, direction: HorizontalDirection): boolean {
+        let updated = false;
+        let fromCell = this.getCell(from.row, from.column); // TODO: one param?
+
+        for (let column = from.column + direction; column >= 0 && column < Grid.columns; column += direction) {
+            const toCell = this.getCell(from.row, column);
+            if (toCell.isEmpty)
+                continue;
+
+            if (fromCell.isEmpty) {
+                this.swapCells({ row: from.row, column }, from);
+                this.raiseCellMoved({ row: from.row, column }, from);
+                fromCell = toCell;
+
+                updated = true;
+            } else if (fromCell.canMergeWith(toCell)) {
+                const newCell = fromCell.mergeWith(toCell);
+                this._cells[from.row][from.column] = newCell;
+                this._cells[from.row][column] = Cell.empty();
+                this.raiseCellMerged(newCell, { row: from.row, column }, from);
+
+                updated = true;
+                return updated;
+            } else {
+                return updated;
+            }
+        }
+
+        return updated;
+    }
+
     private moveUp(): boolean {
         let updated = false;
 
-        // move
         for (let column = 0; column < Grid.columns; column++) {
             for (let row = 0; row < Grid.rows; row++) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = row + 1; k < Grid.rows; k++) {
-                    const nextCell = this._cells[k][column];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row: k, column }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // merge
-        for (let column = 0; column < 4; column++) {
-            for (let row = 0; row < 3; row++) {
-                const cell = this._cells[row][column];
-                if (!cell || cell.isEmpty)
-                    continue;
-
-                const nextCell = this._cells[row + 1][column];
-                if (nextCell && cell.canMergeWith(nextCell)) {
-                    const newCell = cell.mergeWith(nextCell);
-                    this._cells[row][column] = newCell;
-                    this._cells[row + 1][column] = Cell.empty();
-
+                if (this.mergeVertical({ row, column }, 1))
                     updated = true;
-                    this.raiseCellMerged(newCell, { row: row + 1, column }, { row, column });
-                }
-            }
-        }
-
-        // move
-        for (let column = 0; column < Grid.columns; column++) {
-            for (let row = 0; row < Grid.rows; row++) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = row + 1; k < Grid.rows; k++) {
-                    const nextCell = this._cells[k][column];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row: k, column }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
             }
         }
 
@@ -175,60 +190,10 @@ export class Grid {
     private moveDown(): boolean {
         let updated = false;
 
-        // move
-        for (let column = Grid.columns - 1; column >= 0; column--) {
+        for (let column = 0; column < Grid.columns; column++) {
             for (let row = Grid.rows - 1; row >= 0; row--) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = row - 1; k >= 0; k--) {
-                    const nextCell = this._cells[k][column];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row: k, column });
-                        this.raiseCellMoved({ row: k, column }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // merge
-        for (let column = 0; column < 4; column++) {
-            for (let row = 3; row >= 1; row--) {
-                const cell = this._cells[row][column];
-                if (!cell || cell.isEmpty)
-                    continue;
-
-                const nextCell = this._cells[row - 1][column];
-                if (nextCell && cell.canMergeWith(nextCell)) {
-                    const newCell = cell.mergeWith(nextCell);
-                    this._cells[row][column] = newCell;
-                    this._cells[row - 1][column] = Cell.empty();
-
+                if (this.mergeVertical({ row, column }, -1))
                     updated = true;
-                    this.raiseCellMerged(newCell, { row: row - 1, column }, { row, column });
-                }
-            }
-        }
-
-        // move
-        for (let column = Grid.columns - 1; column >= 0; column--) {
-            for (let row = Grid.rows - 1; row >= 0; row--) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = row - 1; k >= 0; k--) {
-                    const nextCell = this._cells[k][column];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ column, row }, { column, row: k });
-                        this.raiseCellMoved({ row: k, column }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
             }
         }
 
@@ -238,60 +203,10 @@ export class Grid {
     private moveLeft(): boolean {
         let updated = false;
 
-        // move
         for (let row = 0; row < Grid.rows; row++) {
             for (let column = 0; column < Grid.columns; column++) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = column + 1; k < 4; k++) {
-                    const nextCell = this._cells[row][k];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column: k }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // merge
-        for (let row = 0; row < Grid.rows; row++) {
-            for (let column = 0; column < Grid.columns - 1; column++) {
-                const cell = this._cells[row][column];
-                if (!cell || cell.isEmpty)
-                    continue;
-
-                const nextCell = this._cells[row][column + 1];
-                if (nextCell && cell.canMergeWith(nextCell)) {
-                    const newCell = cell.mergeWith(nextCell);
-                    this._cells[row][column] = newCell;
-                    this._cells[row][column + 1] = Cell.empty();
-
+                if (this.mergeHorizontal({ row, column }, 1))
                     updated = true;
-                    this.raiseCellMerged(newCell, { row, column: column + 1 }, { row, column });
-                }
-            }
-        }
-
-        // move
-        for (let row = 0; row < Grid.rows; row++) {
-            for (let column = 0; column < Grid.columns; column++) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = column + 1; k < 4; k++) {
-                    const nextCell = this._cells[row][k];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column: k }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
             }
         }
 
@@ -301,60 +216,10 @@ export class Grid {
     private moveRight(): boolean {
         let updated = false;
 
-        // move
-        for (let row = Grid.rows - 1; row >= 0; row--) {
-            for (let column = Grid.columns - 1; column >= 0; column--) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = column - 1; k >= 0; k--) {
-                    const nextCell = this._cells[row][k];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column: k }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // merge
         for (let row = 0; row < Grid.rows; row++) {
-            for (let column = Grid.columns - 1; column >= 1; column--) {
-                const cell = this._cells[row][column];
-                if (!cell || cell.isEmpty)
-                    continue;
-
-                const nextCell = this._cells[row][column - 1];
-                if (nextCell && cell.canMergeWith(nextCell)) {
-                    const newCell = cell.mergeWith(nextCell);
-                    this._cells[row][column] = newCell;
-                    this._cells[row][column - 1] = Cell.empty();
-
-                    updated = true;
-                    this.raiseCellMerged(newCell, { row, column: column - 1 }, { row, column });
-                }
-            }
-        }
-
-        // move
-        for (let row = Grid.rows - 1; row >= 0; row--) {
             for (let column = Grid.columns - 1; column >= 0; column--) {
-                const currentCell = this._cells[row][column];
-                if (!currentCell.isEmpty)
-                    continue;
-
-                for (let k = column - 1; k >= 0; k--) {
-                    const nextCell = this._cells[row][k];
-                    if (nextCell && !nextCell.isEmpty) {
-                        this.swapCells({ row, column }, { row, column: k });
-                        this.raiseCellMoved({ row, column: k }, { row, column });
-                        updated = true;
-                        break;
-                    }
-                }
+                if (this.mergeHorizontal({ row, column }, -1))
+                    updated = true;
             }
         }
 

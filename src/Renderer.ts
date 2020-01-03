@@ -41,6 +41,22 @@ export class Renderer {
                 game.move(MoveDirection.Right);
         });
 
+        document.addEventListener("swiped-up", () => {
+            game.move(MoveDirection.Up);
+        });
+
+        document.addEventListener("swiped-down", () => {
+            game.move(MoveDirection.Down);
+        });
+
+        document.addEventListener("swiped-left", () => {
+            game.move(MoveDirection.Left);
+        });
+
+        document.addEventListener("swiped-right", () => {
+            game.move(MoveDirection.Right);
+        });
+
         document.addEventListener("keydown", event => {
             if (event.key === "ArrowUp" ||
                 event.key === "ArrowDown" ||

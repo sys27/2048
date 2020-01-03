@@ -2,6 +2,8 @@ import { Game } from "./Game";
 import { Renderer } from "./Renderer";
 import { Storage } from "./Storage";
 
+import "../libs/swiped-events.min.js";
+
 import "../index.less";
 
 if (module.hot) {

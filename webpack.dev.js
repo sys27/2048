@@ -10,7 +10,8 @@ module.exports = merge(common, {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         https: false,
-        hot: true
+        hot: true,
+        host: "0.0.0.0"
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

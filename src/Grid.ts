@@ -4,7 +4,7 @@ import { CellMergedEventArgs } from "./Events/CellMergedEventArgs";
 import { CellMovedEventArgs } from "./Events/CellMovedEventArgs";
 import { Event, EventHandler } from "./Events/Event";
 import { MoveDirection } from "./MoveDirection";
-import { IPosition } from "./Position";
+import { Position } from "./Position";
 
 type VerticalDirection = -1 | 1;
 type HorizontalDirection = -1 | 1;
@@ -112,7 +112,7 @@ export class Grid {
         return updated;
     }
 
-    private mergeVertical(from: IPosition, direction: VerticalDirection): boolean {
+    private mergeVertical(from: Position, direction: VerticalDirection): boolean {
         let updated = false;
         let fromCell = this.getCell(from.row, from.column); // TODO: one param?
 
@@ -143,7 +143,7 @@ export class Grid {
         return updated;
     }
 
-    private mergeHorizontal(from: IPosition, direction: HorizontalDirection): boolean {
+    private mergeHorizontal(from: Position, direction: HorizontalDirection): boolean {
         let updated = false;
         let fromCell = this.getCell(from.row, from.column); // TODO: one param?
 
@@ -226,7 +226,7 @@ export class Grid {
         return updated;
     }
 
-    private swapCells(from: IPosition, to: IPosition): void {
+    private swapCells(from: Position, to: Position): void {
         const temp = this._cells[from.row][from.column];
         this._cells[from.row][from.column] = this._cells[to.row][to.column];
         this._cells[to.row][to.column] = temp;
@@ -252,15 +252,15 @@ export class Grid {
         return new Cell(value);
     }
 
-    private generatePosition(): IPosition {
+    private generatePosition(): Position {
         const positions = this.getEmptyCellPositions();
         const position = positions[Math.floor(Math.random() * positions.length)];
 
         return position;
     }
 
-    private getEmptyCellPositions(): IPosition[] {
-        const positions: IPosition[] = [];
+    private getEmptyCellPositions(): Position[] {
+        const positions: Position[] = [];
 
         for (let row = 0; row < Grid.rows; row++) {
             for (let column = 0; column < Grid.columns; column++) {
@@ -283,17 +283,17 @@ export class Grid {
         return this._cells[row][column];
     }
 
-    private raiseCellMoved(from: IPosition, to: IPosition): void {
+    private raiseCellMoved(from: Position, to: Position): void {
         if (this._cellMoved)
             this._cellMoved.raise(new CellMovedEventArgs(from, to));
     }
 
-    private raiseCellMerged(newCell: Cell, from: IPosition, to: IPosition): void {
+    private raiseCellMerged(newCell: Cell, from: Position, to: Position): void {
         if (this._cellMerged)
             this._cellMerged.raise(new CellMergedEventArgs(newCell, from, to));
     }
 
-    private raiseCellCreated(newCell: Cell, position: IPosition): void {
+    private raiseCellCreated(newCell: Cell, position: Position): void {
         if (this._cellCreated)
             this._cellCreated.raise(new CellCreatedEventArgs(newCell, position));
     }

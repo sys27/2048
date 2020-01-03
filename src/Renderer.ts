@@ -6,7 +6,7 @@ import { EventArgs } from "./Events/EventArgs";
 import { Game } from "./Game";
 import { Grid } from "./Grid";
 import { MoveDirection } from "./MoveDirection";
-import { IPosition } from "./Position";
+import { Position } from "./Position";
 import { Storage } from "./Storage";
 
 export class Renderer {
@@ -110,7 +110,7 @@ export class Renderer {
         this.storage.save(this.game);
     }
 
-    private createDivCell(container: Element, cell: Cell, position: IPosition): void {
+    private createDivCell(container: Element, cell: Cell, position: Position): void {
         const divCell = document.createElement("div");
         divCell.classList.add("cell", "cell-floating");
 
@@ -139,7 +139,7 @@ export class Renderer {
         }
     }
 
-    private getDivCell(position: IPosition): HTMLElement {
+    private getDivCell(position: Position): HTMLElement {
         return document.querySelector<HTMLElement>(`[data-row='${position.row}'][data-column='${position.column}']`);
     }
 

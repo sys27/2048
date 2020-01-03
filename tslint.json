@@ -1,9 +1,0 @@
-{
-    "extends": ["tslint:recommended"],
-    "rules": {
-        "variable-name": false,
-        "curly": false,
-        "member-ordering": false,
-        "arrow-parens": false
-    }
-}

@@ -17,6 +17,6 @@ if (storage.hasSaves())
 else
     game.newGame();
 
-export function newGameClick() {
+export function newGameClick(): void {
     game.newGame();
 }

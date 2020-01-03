@@ -1,16 +1,10 @@
 {
     "compilerOptions": {
-        // "outDir": "./dist/",
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "sourceMap": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "plugins": [
-            {
-                "name": "typescript-tslint-plugin"
-            }
-        ]
+        "noImplicitThis": true
     }
 }

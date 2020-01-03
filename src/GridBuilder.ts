@@ -1,6 +1,6 @@
 import { Cell } from "./Cell";
 import { Grid } from "./Grid";
-import { IPosition } from "./Position";
+import { Position } from "./Position";
 
 export class GridBuilder {
 
@@ -21,7 +21,7 @@ export class GridBuilder {
         return new GridBuilder();
     }
 
-    private setCell(cell: Cell, position: IPosition): GridBuilder {
+    private setCell(cell: Cell, position: Position): GridBuilder {
         if (!cell)
             throw new Error(`The cell is undefined.`);
 
@@ -36,13 +36,13 @@ export class GridBuilder {
         return this;
     }
 
-    public addCell(value: number, position: IPosition): GridBuilder {
+    public addCell(value: number, position: Position): GridBuilder {
         this.setCell(new Cell(value), position);
 
         return this;
     }
 
-    public addEmpty(position: IPosition): GridBuilder {
+    public addEmpty(position: Position): GridBuilder {
         this.setCell(Cell.empty(), position);
 
         return this;

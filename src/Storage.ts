@@ -1,6 +1,6 @@
 import { Game } from "./Game";
 
-export interface IStorageData {
+export interface StorageData {
     score: number;
     finished: boolean;
     cells: number[][];
@@ -14,7 +14,7 @@ export class Storage {
         const values = game.cells
             .map(row => row.map(cell => cell.value));
 
-        const data: IStorageData = {
+        const data: StorageData = {
             cells: values,
             finished: game.finished,
             score: game.score,
@@ -27,7 +27,7 @@ export class Storage {
         if (!stringData)
             return;
 
-        const data: IStorageData = JSON.parse(stringData);
+        const data: StorageData = JSON.parse(stringData);
 
         game.loadGame(data);
     }

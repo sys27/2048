@@ -3,7 +3,7 @@ import { Event, EventHandler } from "./Events/Event";
 import { EventArgs } from "./Events/EventArgs";
 import { Grid } from "./Grid";
 import { MoveDirection } from "./MoveDirection";
-import { IStorageData } from "./Storage";
+import { StorageData } from "./Storage";
 
 export class Game {
 
@@ -42,7 +42,7 @@ export class Game {
         this.raiseGameUpdated();
     }
 
-    public loadGame(data: IStorageData): void {
+    public loadGame(data: StorageData): void {
         this._score = data && data.score || 0;
         this._finished = data && data.finished || false;
 

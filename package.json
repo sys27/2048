@@ -29,7 +29,8 @@
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
     "start": "webpack-dev-server --config webpack.dev.js",
-    "test": "tsc && node spec/runner.js"
+    "test": "tsc && node spec/runner.js",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",

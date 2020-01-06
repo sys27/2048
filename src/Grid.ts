@@ -114,7 +114,7 @@ export class Grid {
 
     private mergeVertical(from: Position, direction: VerticalDirection): boolean {
         let updated = false;
-        let fromCell = this.getCell(from.row, from.column); // TODO: one param?
+        let fromCell = this.getCell(from.row, from.column);
 
         for (let row = from.row + direction; row >= 0 && row < Grid.rows; row += direction) {
             const toCell = this.getCell(row, from.column);
@@ -145,7 +145,7 @@ export class Grid {
 
     private mergeHorizontal(from: Position, direction: HorizontalDirection): boolean {
         let updated = false;
-        let fromCell = this.getCell(from.row, from.column); // TODO: one param?
+        let fromCell = this.getCell(from.row, from.column);
 
         for (let column = from.column + direction; column >= 0 && column < Grid.columns; column += direction) {
             const toCell = this.getCell(from.row, column);

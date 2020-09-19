@@ -1,5 +1,5 @@
 import Jasmine = require("jasmine");
-const JasmineConsoleReporter = require("jasmine-console-reporter");
+import JasmineConsoleReporter = require("jasmine-console-reporter");
 
 const j = new Jasmine({});
 const reporter = new JasmineConsoleReporter({

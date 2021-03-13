@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
     "@types/jasmine": "^3.5.14",
     "@types/webpack-env": "^1.15.3",

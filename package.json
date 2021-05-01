@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "devDependencies": {
-    "@types/jasmine": "^3.5.14",
+    "@types/jasmine": "^3.6.10",
     "@types/webpack-env": "^1.15.3",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
@@ -12,7 +12,7 @@
     "css-loader": "^4.3.0",
     "eslint": "^7.9.0",
     "html-webpack-plugin": "^4.4.1",
-    "jasmine": "^3.6.1",
+    "jasmine": "^3.7.0",
     "jasmine-console-reporter": "^3.1.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.1",

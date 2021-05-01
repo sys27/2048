@@ -1,5 +1,5 @@
 declare module "jasmine-console-reporter" {
-    class JasmineConsoleReporter implements jasmine.Reporter {
+    class JasmineConsoleReporter implements jasmine.CustomReporter {
         constructor(options: {
             colors?: number | boolean,
             cleanStack?: number | boolean,
@@ -12,12 +12,12 @@ declare module "jasmine-console-reporter" {
             beep?: boolean
         });
 
-        reportRunnerStarting(runner: jasmine.Runner): void;
-        reportRunnerResults(runner: jasmine.Runner): void;
-        reportSuiteResults(suite: jasmine.Suite): void;
-        reportSpecStarting(spec: jasmine.Spec): void;
-        reportSpecResults(spec: jasmine.Spec): void;
-        log(str: string): void;
+        jasmineStarted?(suiteInfo: jasmine.SuiteInfo): void;
+        suiteStarted?(result: jasmine.CustomReporterResult): void;
+        specStarted?(result: jasmine.CustomReporterResult): void;
+        specDone?(result: jasmine.CustomReporterResult): void;
+        suiteDone?(result: jasmine.CustomReporterResult): void;
+        jasmineDone?(runDetails: jasmine.RunDetails): void;
     }
 
     export = JasmineConsoleReporter;

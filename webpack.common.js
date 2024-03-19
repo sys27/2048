@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: path.join(__dirname, 'src/index.ts'),
@@ -28,9 +27,9 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         libraryTarget: 'var',
         library: 'Index',
+        clean: true,
     },
     plugins: [
-        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.html')
         })

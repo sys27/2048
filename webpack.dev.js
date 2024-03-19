@@ -11,7 +11,6 @@ module.exports = merge(common, {
             directory: path.join(__dirname, 'dist')
         },
         compress: true,
-        https: false,
         hot: true,
         host: "0.0.0.0"
     },

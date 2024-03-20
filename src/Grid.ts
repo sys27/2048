@@ -6,8 +6,9 @@ import { Event, EventHandler } from "./Events/Event";
 import { MoveDirection } from "./MoveDirection";
 import { Position } from "./Position";
 
-type VerticalDirection = -1 | 1;
-type HorizontalDirection = -1 | 1;
+type VerticalDirection = -1 | 0 | 1;
+type HorizontalDirection = -1 | 0 | 1;
+type Direction = [VerticalDirection, HorizontalDirection];
 
 export class Grid {
 
@@ -112,57 +113,28 @@ export class Grid {
         return updated;
     }
 
-    private mergeVertical(from: Position, direction: VerticalDirection): boolean {
+    private merge(from: Position, direction: Direction): boolean {
         let updated = false;
         let fromCell = this.getCell(from.row, from.column);
 
-        for (let row = from.row + direction; row >= 0 && row < Grid.rows; row += direction) {
-            const toCell = this.getCell(row, from.column);
+        for (let row = from.row + direction[0], column = from.column + direction[1];
+            row >= 0 && row < Grid.rows && column >= 0 && column < Grid.columns;
+            row += direction[0], column += direction[1]) {
+            const toCell = this.getCell(row, column);
             if (toCell.isEmpty)
                 continue;
 
             if (fromCell.isEmpty) {
-                this.swapCells({ row, column: from.column }, from);
-                this.raiseCellMoved({ row, column: from.column }, from);
+                this.swapCells({ row, column: column }, from);
+                this.raiseCellMoved({ row, column: column }, from);
                 fromCell = toCell;
 
                 updated = true;
             } else if (fromCell.canMergeWith(toCell)) {
                 const newCell = fromCell.mergeWith(toCell);
                 this._cells[from.row][from.column] = newCell;
-                this._cells[row][from.column] = Cell.empty();
-                this.raiseCellMerged(newCell, { row, column: from.column }, from);
-
-                updated = true;
-                return updated;
-            } else {
-                return updated;
-            }
-        }
-
-        return updated;
-    }
-
-    private mergeHorizontal(from: Position, direction: HorizontalDirection): boolean {
-        let updated = false;
-        let fromCell = this.getCell(from.row, from.column);
-
-        for (let column = from.column + direction; column >= 0 && column < Grid.columns; column += direction) {
-            const toCell = this.getCell(from.row, column);
-            if (toCell.isEmpty)
-                continue;
-
-            if (fromCell.isEmpty) {
-                this.swapCells({ row: from.row, column }, from);
-                this.raiseCellMoved({ row: from.row, column }, from);
-                fromCell = toCell;
-
-                updated = true;
-            } else if (fromCell.canMergeWith(toCell)) {
-                const newCell = fromCell.mergeWith(toCell);
-                this._cells[from.row][from.column] = newCell;
-                this._cells[from.row][column] = Cell.empty();
-                this.raiseCellMerged(newCell, { row: from.row, column }, from);
+                this._cells[row][column] = Cell.empty();
+                this.raiseCellMerged(newCell, { row, column: column }, from);
 
                 updated = true;
                 return updated;
@@ -179,7 +151,7 @@ export class Grid {
 
         for (let column = 0; column < Grid.columns; column++) {
             for (let row = 0; row < Grid.rows; row++) {
-                if (this.mergeVertical({ row, column }, 1))
+                if (this.merge({ row, column }, [1, 0]))
                     updated = true;
             }
         }
@@ -192,7 +164,7 @@ export class Grid {
 
         for (let column = 0; column < Grid.columns; column++) {
             for (let row = Grid.rows - 1; row >= 0; row--) {
-                if (this.mergeVertical({ row, column }, -1))
+                if (this.merge({ row, column }, [-1, 0]))
                     updated = true;
             }
         }
@@ -205,7 +177,7 @@ export class Grid {
 
         for (let row = 0; row < Grid.rows; row++) {
             for (let column = 0; column < Grid.columns; column++) {
-                if (this.mergeHorizontal({ row, column }, 1))
+                if (this.merge({ row, column }, [0, 1]))
                     updated = true;
             }
         }
@@ -218,7 +190,7 @@ export class Grid {
 
         for (let row = 0; row < Grid.rows; row++) {
             for (let column = Grid.columns - 1; column >= 0; column--) {
-                if (this.mergeHorizontal({ row, column }, -1))
+                if (this.merge({ row, column }, [0, -1]))
                     updated = true;
             }
         }

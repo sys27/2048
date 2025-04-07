@@ -7,7 +7,7 @@
     "@types/jasmine": "5.1.7",
     "@types/node": "22.13.14",
     "@types/webpack-env": "1.18.8",
-    "@typescript-eslint/eslint-plugin": "8.29.0",
+    "@typescript-eslint/eslint-plugin": "8.29.1",
     "@typescript-eslint/parser": "8.29.1",
     "css-loader": "7.1.2",
     "eslint": "9.24.0",

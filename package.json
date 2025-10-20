@@ -5,7 +5,7 @@
   "main": "index.js",
   "devDependencies": {
     "@types/jasmine": "5.1.9",
-    "@types/node": "24.7.2",
+    "@types/node": "24.9.0",
     "@types/webpack-env": "1.18.8",
     "@typescript-eslint/eslint-plugin": "8.46.0",
     "@typescript-eslint/parser": "8.46.1",

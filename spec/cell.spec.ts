@@ -37,7 +37,7 @@ describe("Cell", () => {
         expect(canMerge).toBeFalsy();
     });
 
-    it("Can merge cell with same values", () => {
+    it("Can merge cell with different values", () => {
         const cell1 = new Cell(2);
         const cell2 = new Cell(4);
 
@@ -70,7 +70,7 @@ describe("Cell", () => {
         expect(() => cell1.mergeWith(cell2)).toThrowError();
     });
 
-    it("Merge cell with same values", () => {
+    it("Merge cell with different values", () => {
         const cell1 = new Cell(2);
         const cell2 = new Cell(4);
 

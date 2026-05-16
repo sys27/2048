@@ -3,7 +3,7 @@ import { Game } from "./Game";
 export interface StorageData {
     score: number;
     finished: boolean;
-    cells: number[][];
+    cells: (number | null)[][];
 }
 
 export class Storage {

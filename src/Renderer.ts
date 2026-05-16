@@ -22,7 +22,7 @@ export class Renderer {
         if (!game)
             throw new Error(`The game is undefined.`);
 
-        this._scoreElement = document.getElementById("score_value");
+        this._scoreElement = document.getElementById("score_value")!;
         this._container = document.getElementsByClassName("container")[0];
 
         this.game.addSubsriptionToGameUpdated(args => this.renderGame(args));
@@ -114,10 +114,10 @@ export class Renderer {
             return;
 
         const fromCell = this.getDivCell(from);
-        fromCell.parentNode.removeChild(fromCell);
+        fromCell.parentNode!.removeChild(fromCell);
 
         const toCell = this.getDivCell(to);
-        toCell.parentNode.removeChild(toCell);
+        toCell.parentNode!.removeChild(toCell);
 
         this.createDivCell(this._container, newCell, to);
 
@@ -130,10 +130,12 @@ export class Renderer {
         const divCell = document.createElement("div");
         divCell.classList.add("cell", "cell-floating");
 
-        if (cell.value > 2048)
-            divCell.classList.add(`cell-more`);
-        else
-            divCell.classList.add(`cell-${cell.value}`);
+        if (cell.value) {
+            if (cell.value > 2048)
+                divCell.classList.add(`cell-more`);
+            else
+                divCell.classList.add(`cell-${cell.value}`);
+        }
 
         divCell.setAttribute("data-row", position.row.toString());
         divCell.setAttribute("data-column", position.column.toString());
@@ -151,12 +153,12 @@ export class Renderer {
     private removeElementsByClass(className: string): void {
         const elements = document.getElementsByClassName(className);
         while (elements.length > 0) {
-            elements[0].parentNode.removeChild(elements[0]);
+            elements[0].parentNode!.removeChild(elements[0]);
         }
     }
 
     private getDivCell(position: Position): HTMLElement {
-        return document.querySelector<HTMLElement>(`[data-row='${position.row}'][data-column='${position.column}']`);
+        return document.querySelector<HTMLElement>(`[data-row='${position.row}'][data-column='${position.column}']`)!;
     }
 
 }

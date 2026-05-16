@@ -1,7 +1,7 @@
 export class Cell {
 
-    public constructor(private _value: number) {
-        if (!this.isPowerOfTwo(_value))
+    public constructor(private _value: number | null) {
+        if (_value != null && !this.isPowerOfTwo(_value))
             throw new Error(`The '${_value}' value is not allowed.`);
     }
 
@@ -10,21 +10,21 @@ export class Cell {
     }
 
     public canMergeWith(cell: Cell): boolean {
-        return !this.isEmpty && this.value === cell.value;
+        return !this.isEmpty && !cell.isEmpty && this.value === cell.value;
     }
 
     public mergeWith(cell: Cell): Cell {
         if (!this.canMergeWith(cell))
             throw new Error(`${this._value} and ${cell._value} cannot be merged.`);
 
-        return new Cell(this.value + cell.value);
+        return new Cell(this.value! + cell.value!);
     }
 
     private isPowerOfTwo(value: number): boolean {
         return (value !== 0) && ((value & (value - 1)) === 0);
     }
 
-    public get value(): number {
+    public get value(): number | null {
         return this._value;
     }
 

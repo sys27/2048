@@ -15,7 +15,7 @@ export class Grid {
     public static readonly rows: number = 4;
     public static readonly columns: number = 4;
 
-    private _cells: Cell[][];
+    private _cells!: Cell[][];
 
     private _cellMoved: Event<CellMovedEventArgs>;
     private _cellMerged: Event<CellMergedEventArgs>;

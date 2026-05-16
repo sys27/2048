@@ -1,9 +1,10 @@
 name: Node CI
 
 on:
-  push:	
-    branches:	
+  push:
+    branches:
       - master
+  pull_request:
 
 jobs:
   build:
@@ -22,6 +23,7 @@ jobs:
         npm run build
         npm test
     - name: Deploy
+      if: github.ref == 'refs/heads/master'
       uses: crazy-max/ghaction-github-pages@v1
       with:
         target_branch: gh-pages

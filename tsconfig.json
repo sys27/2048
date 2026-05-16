@@ -5,6 +5,10 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noImplicitThis": true
+        "noImplicitThis": true,
+        "types": [
+            "node",
+            "webpack-env"
+        ],
     }
 }

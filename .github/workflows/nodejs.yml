@@ -8,13 +8,14 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v6
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: 26.x
     - name: npm install, build, and test
@@ -24,7 +25,7 @@ jobs:
         npm test
     - name: Deploy
       if: github.ref == 'refs/heads/master'
-      uses: crazy-max/ghaction-github-pages@v1
+      uses: crazy-max/ghaction-github-pages@v5
       with:
         target_branch: gh-pages
         build_dir: dist
